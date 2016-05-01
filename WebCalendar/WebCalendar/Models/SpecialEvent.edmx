@@ -14,7 +14,9 @@
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="Description" Type="varchar" MaxLength="255" />
         </EntityType>
-        <Function Name="procWebGetEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="procWebGetEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Day" Type="datetime" Mode="In" />
+        </Function>
         <EntityContainer Name="SpecialEventsModelStoreContainer">
           <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -33,7 +35,9 @@
         </EntityType>
         <EntityContainer Name="SpecialEventsEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Events" EntityType="Self.Event" />
-          <FunctionImport Name="procWebGetEvent" ReturnType="Collection(SpecialEventsModel.procWebGetEvent_Result)" />
+          <FunctionImport Name="procWebGetEvent" ReturnType="Collection(SpecialEventsModel.procWebGetEvent_Result)">
+            <Parameter Name="Day" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="procWebGetEvent_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />

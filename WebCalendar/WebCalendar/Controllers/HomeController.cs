@@ -10,6 +10,13 @@ namespace WebCalendar.Controllers
 {
     public class HomeController : Controller
     {
+        private SpecialEventsEntities _context;
+
+        public HomeController()
+        {
+            _context = new SpecialEventsEntities();
+        }
+
         public ActionResult Index()
         {
             return View();

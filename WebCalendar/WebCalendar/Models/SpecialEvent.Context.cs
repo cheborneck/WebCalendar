@@ -29,9 +29,13 @@ namespace WebCalendar.Models
     
         public virtual DbSet<Event> Events { get; set; }
     
-        public virtual ObjectResult<procWebGetEvent_Result> procWebGetEvent()
+        public virtual ObjectResult<procWebGetEvent_Result> procWebGetEvent(Nullable<System.DateTime> day)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<procWebGetEvent_Result>("procWebGetEvent");
+            var dayParameter = day.HasValue ?
+                new ObjectParameter("Day", day) :
+                new ObjectParameter("Day", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<procWebGetEvent_Result>("procWebGetEvent", dayParameter);
         }
     }
 }
