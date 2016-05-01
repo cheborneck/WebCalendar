@@ -32,9 +32,10 @@ Planning.SECalendar = (function ($) {
         };
 
         var specialEvent = {
-            CaseId: "",
-            CaseName: "",
-            CaseDescription: ""
+            ID: "",
+            Title: "",
+            Date: "",
+            Description: ""
         }
 
         // Goes to next month
@@ -137,7 +138,7 @@ Planning.SECalendar = (function ($) {
                 // add data
                 if (specialEvents.length > 0) {
                     specialEvents.forEach(function (event) {
-                        html += '<a style="font-weight: bold; font-size: x-small" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.CaseId + '" data-toggle="tooltip" title="' + event.CaseDescription + '">' + event.CaseName + '</a><br/><br/>';
+                        html += '<a style="font-weight: bold; font-size: x-small" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.ID + '" data-toggle="tooltip" title="' + event.Description + '">' + event.Title + '</a><br/><br/>';
                     });
                 };
                 html += '</td>';
