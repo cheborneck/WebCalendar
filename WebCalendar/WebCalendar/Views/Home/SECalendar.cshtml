@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Special Events Calendar";
+}
+<h2>@ViewBag.Title</h2>
+<div class="row">
+    <div class="btn-group-sm" style="padding: 20px 0 20px 0">
+        <button class="btn btn-default" id="btnPrev" type="button"><span class="fa fa-caret-left"></span></button>
+        <button class="btn btn-default" id="btnNext" type="button"><span class="fa fa-caret-right"></span></button>
+        <button class="btn btn-default" id="btnToday" type="button">Today</button>
+    </div>
+    <div id="calendar" class="table-responsive"></div>
+</div>
+
+@section JavaScript
+{
+    @Scripts.Render("~/js/SpecialEvents")
+
+    <script type="text/javascript">
+        $(document).ready(
+            Planning.SECalendar.Init()
+        );
+    </script>
+}
