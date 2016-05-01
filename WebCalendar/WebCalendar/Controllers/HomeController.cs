@@ -46,18 +46,7 @@ namespace WebCalendar.Controllers
         [HttpGet]
         public JsonResult GetSpecialEvents(DateTime date)
         {
-            List<Event> model = new List<Event>();
-            ;
-            if (date == DateTime.Parse("04/30/2016"))
-            {
-                model.Add(new Event
-                {
-                    ID = 1234,
-                    Title = "Bootleggers Pork Picken",
-                    Date = new DateTime(2016, 12, 30),
-                    Description = "Bootleggers annual pork cookout"
-                });
-            }
+            var model = _context.procWebGetEvent(date).ToList();
 
             return Json(new { success = true, result = model }, JsonRequestBehavior.AllowGet);
         }
