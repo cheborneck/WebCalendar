@@ -139,7 +139,7 @@ Planning.SECalendar = (function ($) {
                 //        html += '<a style="font-weight: bold; font-size: x-small" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.CaseId + '" data-toggle="tooltip" title="' + event.CaseDescription + '">' + event.CaseName + '</a><br/><br/>';
                 //    });
                 //};
-                //html += '</td>';
+                html += '</td>';
 
                 // If Saturday, closes the row
                 if (dow == 6) {

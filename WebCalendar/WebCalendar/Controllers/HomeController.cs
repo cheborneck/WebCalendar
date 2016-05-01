@@ -26,5 +26,12 @@ namespace WebCalendar.Controllers
 
             return View();
         }
+
+        public ActionResult SECalendar()
+        {
+            ViewBag.Message = "Special Events Calendar";
+
+            return View();
+        }
     }
 }

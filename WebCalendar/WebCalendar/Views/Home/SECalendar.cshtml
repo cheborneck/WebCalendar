@@ -1,7 +1,4 @@
-﻿@{
-    ViewBag.Title = "Special Events Calendar";
-}
-<h2>@ViewBag.Title</h2>
+﻿<h2>@ViewBag.Message</h2>
 <div class="row">
     <div class="btn-group-sm" style="padding: 20px 0 20px 0">
         <button class="btn btn-default" id="btnPrev" type="button"><span class="fa fa-caret-left"></span></button>
@@ -11,9 +8,9 @@
     <div id="calendar" class="table-responsive"></div>
 </div>
 
-@section JavaScript
+@section Scripts
 {
-    @Scripts.Render("~/js/SpecialEvents")
+    @Scripts.Render("~/Scripts/SpecialEvents.js")
 
     <script type="text/javascript">
         $(document).ready(
