@@ -5,16 +5,15 @@ Planning.SECalendar = (function ($) {
     var init = function () {
 
         var persistentData = "";
-        var thisDate = new Date();
+        var thisDate;
 
         if (Modernizr.sessionstorage) {
             persistentData = window.sessionStorage;
             thisDate = new Date(persistentData.getItem("keySpecialEventsCalendar"));
-            if (Date.parse(thisDate)) {// this is how you check for a valid date
-                persistentData.setItem("keySpecialEventsCalendar", thisDate);
-            } else {
-                persistentData.setItem("keySpecialEventsCalendar", new Date());
+            if (!(Date.parse(thisDate))) {// this is how you check for a valid date
+                thisDate = new Date();
             }
+            persistentData.setItem("keySpecialEventsCalendar", thisDate);
         }
 
         var Calendar = function (id) {
@@ -62,7 +61,9 @@ Planning.SECalendar = (function ($) {
 
         // Show current month
         Calendar.prototype.showCurrent = function () {
-            if (Modernizr.sessionstorage) { persistentData.setItem("keySpecialEventsCalendar", new Date(this.CurrentYear, this.CurrentMonth, this.CurrrentDay)); }
+            if (Modernizr.sessionstorage) {
+                persistentData.setItem("keySpecialEventsCalendar", new Date(this.CurrentYear, this.CurrentMonth, this.CurrentDay));
+            }
             this.showMonth(this.CurrentYear, this.CurrentMonth);
         };
 
@@ -110,22 +111,22 @@ Planning.SECalendar = (function ($) {
                     }
                 }
 
-                //var today = new Date(y, m, d);
-                //$.ajax({
-                //    cache: true,
-                //    async: false,
-                //    type: 'get',
-                //    url: ApplicationOptions.BaseUrl + '/Cases/GetSpecialEvents',
-                //    contentType: 'application/json; charset=utf-8',
-                //    data: { date: today.toISOString() },
-                //    datatype: 'json',
-                //    success: function (data) {
-                //        specialEvents = $.map(data.result, function (el) { return el });
-                //    },
-                //    error: function (request, status, error) {;
-                //        alert(request.responseText);
-                //    }
-                //});
+                var today = new Date(y, m, d);
+                $.ajax({
+                    cache: true,
+                    async: false,
+                    type: 'get',
+                    url: '/Home/GetSpecialEvents',
+                    contentType: 'application/json; charset=utf-8',
+                    data: { date: today.toISOString() },
+                    datatype: 'json',
+                    success: function (data) {
+                        specialEvents = $.map(data.result, function (el) { return el });
+                    },
+                    error: function (request, status, error) {;
+                        alert(request.responseText);
+                    }
+                });
 
                 // Write the current day in the loop
                 if (d == this.CurrentDay && m == this.thisMonth && y == this.thisYear) {
@@ -134,11 +135,11 @@ Planning.SECalendar = (function ($) {
                     html += '<td style="font-weight: bold; line-height: 50%">' + d + '<br/><br/>';
                 }
                 // add data
-                //if (specialEvents.length > 0) {
-                //    specialEvents.forEach(function (event) {
-                //        html += '<a style="font-weight: bold; font-size: x-small" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.CaseId + '" data-toggle="tooltip" title="' + event.CaseDescription + '">' + event.CaseName + '</a><br/><br/>';
-                //    });
-                //};
+                if (specialEvents.length > 0) {
+                    specialEvents.forEach(function (event) {
+                        html += '<a style="font-weight: bold; font-size: x-small" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.CaseId + '" data-toggle="tooltip" title="' + event.CaseDescription + '">' + event.CaseName + '</a><br/><br/>';
+                    });
+                };
                 html += '</td>';
 
                 // If Saturday, closes the row
