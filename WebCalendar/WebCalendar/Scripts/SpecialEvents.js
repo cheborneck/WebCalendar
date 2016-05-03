@@ -81,11 +81,6 @@ Planning.SECalendar = (function ($) {
             this.showMonth(this.CurrentYear, this.CurrentMonth);
         };
 
-        // Show this month
-        Calendar.prototype.showThisMonth = function () {
-            this.showMonth(this.thisYear, this.thisMonth);
-        };
-
         var specialEvents = [specialEvent];
 
         // Show month (year, month)
