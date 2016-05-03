@@ -63,6 +63,14 @@ Planning.SECalendar = (function ($) {
             this.showCurrent();
         };
 
+        // reset the current month
+        Calendar.prototype.currentMonth = function() {
+            thisDate = new Date();
+            this.CurrentMonth = thisDate.getMonth();
+            this.CurrentYear = thisDate.getFullYear();
+            this.showCurrent();
+        };
+
         // Show current month
         Calendar.prototype.showCurrent = function () {
             if (Modernizr.sessionstorage) {
@@ -194,12 +202,7 @@ Planning.SECalendar = (function ($) {
                 calendar.previousMonth();
             };
             getId('btnToday').onclick = function() {
-                thisDate = new Date();
-                //this.CurrentMonth = thisDate.getMonth();
-                //this.CurrentYear = thisDate.getFullYear();
-                //this.CurrentDay = thisDate.getDate();
-                persistentData.setItem("keySpecialEventsCalendar", thisDate);
-                calendar.showMonth(thisDate.getFullYear(), thisDate.getMonth());
+                calendar.currentMonth();
             };
         };
 
