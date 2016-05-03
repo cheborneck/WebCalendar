@@ -5,12 +5,15 @@ Planning.SECalendar = (function ($) {
     var init = function () {
 
         var persistentData = "";
-        var thisDate;
+        var thisDate = new Date();
+        var thisMonth = thisDate.getMonth();
+        var thisYear = thisDate.getFullYear();
 
         if (Modernizr.sessionstorage) {
             persistentData = window.sessionStorage;
-            thisDate = new Date(persistentData.getItem("keySpecialEventsCalendar"));
-            if (!(Date.parse(thisDate))) {// this is how you check for a valid date
+            thisDate = persistentData.getItem("keySpecialEventsCalendar");
+            thisDate = new Date(thisDate);
+            if (!(Date.parse(thisDate))) {// this is an invalid date
                 thisDate = new Date();
             }
             persistentData.setItem("keySpecialEventsCalendar", thisDate);
@@ -63,7 +66,9 @@ Planning.SECalendar = (function ($) {
         // Show current month
         Calendar.prototype.showCurrent = function () {
             if (Modernizr.sessionstorage) {
-                persistentData.setItem("keySpecialEventsCalendar", new Date(this.CurrentYear, this.CurrentMonth, this.CurrentDay));
+                var tempDate = new Date();
+                tempDate.setFullYear(this.CurrentYear, this.CurrentMonth, 1);
+                persistentData.setItem("keySpecialEventsCalendar", tempDate);
             }
             this.showMonth(this.CurrentYear, this.CurrentMonth);
         };
@@ -125,12 +130,12 @@ Planning.SECalendar = (function ($) {
                         specialEvents = $.map(data.result, function (el) { return el });
                     },
                     error: function (request, status, error) {;
-                        alert(request.responseText);
+                        alert(request.responseText.message);
                     }
                 });
 
                 // Write the current day in the loop
-                if (d == this.CurrentDay && m == this.thisMonth && y == this.thisYear) {
+                if (d == this.CurrentDay && m == thisMonth && y == thisYear) {
                     html += '<td class="bg-success" style="font-weight: bold; line-height: 50%">' + d + '<br/><br/>';
                 } else {
                     html += '<td style="font-weight: bold; line-height: 50%">' + d + '<br/><br/>';
@@ -167,24 +172,36 @@ Planning.SECalendar = (function ($) {
 
         window.onload = function () {
 
+            if (Modernizr.sessionstorage) {
+                persistentData = window.sessionStorage;
+                thisDate = new Date(persistentData.getItem("keySpecialEventsCalendar"));
+                if (!(Date.parse(thisDate))) { // this is how you check for a valid date
+                    thisDate = new Date();
+                }
+                persistentData.setItem("keySpecialEventsCalendar", thisDate);
+            }
+
             // Start calendar
             var calendar = new Calendar('calendar');
+
             calendar.showCurrent();
 
             // Bind next and previous button clicks
-            getId('btnNext').onclick = function () {
+            getId('btnNext').onclick = function() {
                 calendar.nextMonth();
             };
-            getId('btnPrev').onclick = function () {
+            getId('btnPrev').onclick = function() {
                 calendar.previousMonth();
             };
-            getId('btnToday').onclick = function () {
-                persistentData.clear();
+            getId('btnToday').onclick = function() {
                 thisDate = new Date();
+                //this.CurrentMonth = thisDate.getMonth();
+                //this.CurrentYear = thisDate.getFullYear();
+                //this.CurrentDay = thisDate.getDate();
                 persistentData.setItem("keySpecialEventsCalendar", thisDate);
-                calendar.showThisMonth();
+                calendar.showMonth(thisDate.getFullYear(), thisDate.getMonth());
             };
-        }
+        };
 
         // Get element by id
         function getId(id) {
