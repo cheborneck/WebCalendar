@@ -46,9 +46,19 @@ namespace WebCalendar.Controllers
         [HttpGet]
         public JsonResult GetSpecialEvents(DateTime date)
         {
-            var model = _context.procWebGetEvent(date).ToList();
+            DateTime today = DateTime.Today;
+            int lastDayOfMonth = DateTime.DaysInMonth(date.Year, date.Month);
+            IList<procWebGetEvent_Result>[] monthlyEventsList = new IList<procWebGetEvent_Result>[lastDayOfMonth];
+            for (int day = 1; day <= lastDayOfMonth; day++)
+            {
+                // build the cell for this date
+                DateTime thisDate = new DateTime(date.Year, date.Month, day);
+                monthlyEventsList[day - 1] = _context.procWebGetEvent(thisDate).ToList();
+            }
 
+            var model = monthlyEventsList;
             return Json(new { success = true, result = model }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

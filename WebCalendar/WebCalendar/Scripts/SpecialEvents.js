@@ -34,12 +34,7 @@ Planning.SECalendar = (function ($) {
             this.thisYear = this.CurrentYear;
         };
 
-        var specialEvent = {
-            ID: "",
-            Title: "",
-            Date: "",
-            Description: ""
-        }
+        var specialEvents;
 
         // Goes to next month
         Calendar.prototype.nextMonth = function () {
@@ -81,8 +76,6 @@ Planning.SECalendar = (function ($) {
             this.showMonth(this.CurrentYear, this.CurrentMonth);
         };
 
-        var specialEvents = [specialEvent];
-
         // Show month (year, month)
         Calendar.prototype.showMonth = function (y, m) {
 
@@ -100,6 +93,23 @@ Planning.SECalendar = (function ($) {
                 html += '<td>' + this.DaysOfWeek[i] + '</td>';
             }
             html += '</tr>';
+
+            var today = new Date(y, m, 1);
+            $.ajax({
+                cache: true,
+                async: false,
+                type: 'get',
+                url: '/Home/GetSpecialEvents',
+                contentType: 'application/json; charset=utf-8',
+                data: { date: today.toISOString() },
+                datatype: 'json',
+                success: function (data) {
+                    specialEvents = data.result;
+                },
+                error: function (request, status, error) {;
+                    alert(request.responseText.message);
+                }
+            });
 
             // Write the days
             var d = 1;
@@ -120,23 +130,6 @@ Planning.SECalendar = (function ($) {
                     }
                 }
 
-                var today = new Date(y, m, d);
-                $.ajax({
-                    cache: true,
-                    async: false,
-                    type: 'get',
-                    url: '/Home/GetSpecialEvents',
-                    contentType: 'application/json; charset=utf-8',
-                    data: { date: today.toISOString() },
-                    datatype: 'json',
-                    success: function (data) {
-                        specialEvents = $.map(data.result, function (el) { return el });
-                    },
-                    error: function (request, status, error) {;
-                        alert(request.responseText.message);
-                    }
-                });
-
                 // Write the current day in the loop
                 if (d == this.CurrentDay && m == thisMonth && y == thisYear) {
                     html += '<td class="bg-success" style="font-weight: bold; margin-top: 0">' + d + '<br/>';
@@ -144,8 +137,8 @@ Planning.SECalendar = (function ($) {
                     html += '<td style="font-weight: bold; margin-top: 0">' + d + '<br/>';
                 }
                 // add data
-                if (specialEvents.length > 0) {
-                    specialEvents.forEach(function (event) {
+                if (specialEvents[d-1].length > 0) {
+                    specialEvents[d-1].forEach(function (event) {
                         html += '<a style="font-weight: bold; font-size: small; display: block; line-height: 1; margin-bottom: 5px;" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.ID + '" data-toggle="tooltip" title="' + event.Description + '">' + event.Title + '</a>';
                     });
                 };
