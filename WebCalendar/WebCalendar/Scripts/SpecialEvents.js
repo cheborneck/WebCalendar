@@ -115,7 +115,7 @@ Planning.SECalendar = (function ($) {
                     html += '<tr>';
                     var k = lastDayOfLastMonth - firstDayOfMonth + 1;
                     for (var j = 0; j < firstDayOfMonth; j++) {
-                        html += '<td style="background-color: whitesmoke; line-height: 50%">' + k + '</td>';
+                        html += '<td style="background-color: whitesmoke">' + k + '</td>';
                         k++;
                     }
                 }
@@ -139,14 +139,14 @@ Planning.SECalendar = (function ($) {
 
                 // Write the current day in the loop
                 if (d == this.CurrentDay && m == thisMonth && y == thisYear) {
-                    html += '<td class="bg-success" style="font-weight: bold; line-height: 50%">' + d + '<br/><br/>';
+                    html += '<td class="bg-success" style="font-weight: bold; margin-top: 0">' + d + '<br/>';
                 } else {
-                    html += '<td style="font-weight: bold; line-height: 50%">' + d + '<br/><br/>';
+                    html += '<td style="font-weight: bold; margin-top: 0">' + d + '<br/>';
                 }
                 // add data
                 if (specialEvents.length > 0) {
                     specialEvents.forEach(function (event) {
-                        html += '<a style="font-weight: bold; font-size: x-small" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.ID + '" data-toggle="tooltip" title="' + event.Description + '">' + event.Title + '</a><br/><br/>';
+                        html += '<a style="font-weight: bold; font-size: small; display: block; line-height: 1; margin-bottom: 5px;" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.ID + '" data-toggle="tooltip" title="' + event.Description + '">' + event.Title + '</a>';
                     });
                 };
                 html += '</td>';
@@ -159,7 +159,7 @@ Planning.SECalendar = (function ($) {
                     // it will write the next few days from the next month
                     var k = 1;
                     for (dow; dow < 6; dow++) {
-                        html += '<td style="background-color: whitesmoke; line-height: 50%">' + k + '</td>';
+                        html += '<td style="background-color: whitesmoke">' + k + '</td>';
                         k++;
                     }
                 }
