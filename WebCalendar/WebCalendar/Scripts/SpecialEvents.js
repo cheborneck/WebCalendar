@@ -81,7 +81,7 @@ Planning.SECalendar = (function ($) {
 
             var today = new Date(y, m, 1);
             // write the title
-            html = '<table class="table table-bordered">';
+            var html = '<table class="table table-bordered">';
             html += '<tr><td colspan="7" class="text-center text-uppercase bg-info" style="font-weight: bold">' + this.Months[m] + ' - ' + y + '</td></tr>';
 
             // Write the header of the days of the week
