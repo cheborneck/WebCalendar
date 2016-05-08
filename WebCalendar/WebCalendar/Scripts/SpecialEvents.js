@@ -34,7 +34,7 @@ Planning.SECalendar = (function ($) {
             this.thisYear = this.CurrentYear;
         };
 
-        var specialEvents;
+        var specialEvents = [];
 
         // Goes to next month
         Calendar.prototype.nextMonth = function () {
@@ -79,12 +79,9 @@ Planning.SECalendar = (function ($) {
         // Show month (year, month)
         Calendar.prototype.showMonth = function (y, m) {
 
-            var firstDayOfMonth = new Date(y, m, 1).getDay();
-            var lastDateOfMonth = new Date(y, m + 1, 0).getDate();
-            var lastDayOfLastMonth = m == 0 ? new Date(y - 1, 11, 0).getDate() : new Date(y, m, 0).getDate();
-
-            var html = '<table class="table table-bordered">';
-
+            var today = new Date(y, m, 1);
+            // write the title
+            html = '<table class="table table-bordered">';
             html += '<tr><td colspan="7" class="text-center text-uppercase bg-info" style="font-weight: bold">' + this.Months[m] + ' - ' + y + '</td></tr>';
 
             // Write the header of the days of the week
@@ -94,7 +91,6 @@ Planning.SECalendar = (function ($) {
             }
             html += '</tr>';
 
-            var today = new Date(y, m, 1);
             $.ajax({
                 cache: true,
                 async: false,
@@ -105,62 +101,66 @@ Planning.SECalendar = (function ($) {
                 datatype: 'json',
                 success: function (data) {
                     specialEvents = data.result;
+
+                    var firstDayOfMonth = new Date(y, m, 1).getDay();
+                    var lastDateOfMonth = new Date(y, m + 1, 0).getDate();
+                    var lastDayOfLastMonth = m == 0 ? new Date(y - 1, 11, 0).getDate() : new Date(y, m, 0).getDate();
+
+                    // Write the days
+                    var d = 1;
+                    do {
+                        var dow = new Date(y, m, d).getDay();
+
+                        // If Sunday, start new row
+                        if (dow == 0) {
+                            html += '<tr>';
+                        } else if (d == 1) {
+                            // If not Sunday but first day of the month
+                            // it will write the last days from the previous month
+                            html += '<tr>';
+                            var k = lastDayOfLastMonth - firstDayOfMonth + 1;
+                            for (var j = 0; j < firstDayOfMonth; j++) {
+                                html += '<td style="background-color: whitesmoke">' + k + '</td>';
+                                k++;
+                            }
+                        }
+
+                        // Write the current day in the loop
+                        if (d == this.CurrentDay && m == thisMonth && y == thisYear) {
+                            html += '<td class="bg-success" style="font-weight: bold; margin-top: 0">' + d + '<br/>';
+                        } else {
+                            html += '<td style="font-weight: bold; margin-top: 0">' + d + '<br/>';
+                        }
+                        // add data
+                        if (specialEvents[d - 1].length > 0) {
+                            specialEvents[d - 1].forEach(function (event) {
+                                html += '<a style="font-weight: bold; font-size: small; display: block; line-height: 1; margin-bottom: 5px;" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.ID + '" data-toggle="tooltip" title="' + event.Description + '">' + event.Title + '</a>';
+                            });
+                        };
+                        html += '</td>';
+
+                        // If Saturday, closes the row
+                        if (dow == 6) {
+                            html += '</tr>';
+                        } else if (d == lastDateOfMonth) {
+                            // If not Saturday, but last day of the selected month
+                            // it will write the next few days from the next month
+                            var k = 1;
+                            for (dow; dow < 6; dow++) {
+                                html += '<td style="background-color: whitesmoke">' + k + '</td>';
+                                k++;
+                            }
+                        }
+
+                        d++;
+                    } while (d <= lastDateOfMonth);
+
+                    html += '</table>';
                 },
                 error: function (request, status, error) {;
-                    alert(request.responseText.message);
+                    html = request.responseText;
                 }
             });
-
-            // Write the days
-            var d = 1;
-            do {
-                var dow = new Date(y, m, d).getDay();
-
-                // If Sunday, start new row
-                if (dow == 0) {
-                    html += '<tr>';
-                } else if (d == 1) {
-                    // If not Sunday but first day of the month
-                    // it will write the last days from the previous month
-                    html += '<tr>';
-                    var k = lastDayOfLastMonth - firstDayOfMonth + 1;
-                    for (var j = 0; j < firstDayOfMonth; j++) {
-                        html += '<td style="background-color: whitesmoke">' + k + '</td>';
-                        k++;
-                    }
-                }
-
-                // Write the current day in the loop
-                if (d == this.CurrentDay && m == thisMonth && y == thisYear) {
-                    html += '<td class="bg-success" style="font-weight: bold; margin-top: 0">' + d + '<br/>';
-                } else {
-                    html += '<td style="font-weight: bold; margin-top: 0">' + d + '<br/>';
-                }
-                // add data
-                if (specialEvents[d-1].length > 0) {
-                    specialEvents[d-1].forEach(function (event) {
-                        html += '<a style="font-weight: bold; font-size: small; display: block; line-height: 1; margin-bottom: 5px;" href="https://eservices.scottsdaleaz.gov/bldgresources/cases/details/' + event.ID + '" data-toggle="tooltip" title="' + event.Description + '">' + event.Title + '</a>';
-                    });
-                };
-                html += '</td>';
-
-                // If Saturday, closes the row
-                if (dow == 6) {
-                    html += '</tr>';
-                } else if (d == lastDateOfMonth) {
-                    // If not Saturday, but last day of the selected month
-                    // it will write the next few days from the next month
-                    var k = 1;
-                    for (dow; dow < 6; dow++) {
-                        html += '<td style="background-color: whitesmoke">' + k + '</td>';
-                        k++;
-                    }
-                }
-
-                d++;
-            } while (d <= lastDateOfMonth);
-
-            html += '</table>';
 
             // Write HTML to the div
             document.getElementById(this.id).innerHTML = html;
