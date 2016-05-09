@@ -8,6 +8,7 @@ Planning.SECalendar = (function ($) {
         var thisDate = new Date();
         var thisMonth = thisDate.getMonth();
         var thisYear = thisDate.getFullYear();
+        var thisDay = thisDate.getDay();
 
         if (Modernizr.sessionstorage) {
             persistentData = window.sessionStorage;
@@ -126,7 +127,7 @@ Planning.SECalendar = (function ($) {
                         }
 
                         // Write the current day in the loop
-                        if (d == this.CurrentDay && m == thisMonth && y == thisYear) {
+                        if (d == thisDay && m == thisMonth && y == thisYear) {
                             html += '<td class="bg-success" style="font-weight: bold; margin-top: 0">' + d + '<br/>';
                         } else {
                             html += '<td style="font-weight: bold; margin-top: 0">' + d + '<br/>';
