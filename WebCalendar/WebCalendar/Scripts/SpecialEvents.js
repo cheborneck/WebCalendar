@@ -8,7 +8,7 @@ Planning.SECalendar = (function ($) {
         var thisDate = new Date();
         var thisMonth = thisDate.getMonth();
         var thisYear = thisDate.getFullYear();
-        var thisDay = thisDate.getDay();
+        var thisDay = thisDate.getDate();
 
         if (Modernizr.sessionstorage) {
             persistentData = window.sessionStorage;
@@ -29,7 +29,6 @@ Planning.SECalendar = (function ($) {
 
             this.CurrentMonth = thisDate.getMonth();
             this.CurrentYear = thisDate.getFullYear();
-            this.CurrentDay = thisDate.getDate();
 
             this.thisMonth = this.CurrentMonth;
             this.thisYear = this.CurrentYear;
