@@ -1,7 +1,30 @@
 ﻿@{
     ViewBag.Title = "About";
 }
+
+<style>
+input[type=checkbox] {
+    vertical-align: -0.1em;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+</style>
+
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
 <p>Use this area to provide additional information.</p>
+
+<label><input type="checkbox" />Fencing</label>
+<label><input type="checkbox" />Zoning</label>
+<label><input type="checkbox"/>Pools</label>
+
+<div id="checkBoxes"></div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(
+        );
+    </script>
+}

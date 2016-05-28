@@ -195,9 +195,9 @@ Planning.SECalendar = (function ($) {
         };
 
         // reinitialize calendar if the user refreshes the page
-        window.onunload = function() {
-            persistentData.clear();
-        }
+        //window.onunload = function() {
+        //    persistentData.clear();
+        //}
 
         // Get element by id
         function getId(id) {
@@ -207,6 +207,6 @@ Planning.SECalendar = (function ($) {
 
     return {
         Init: init
-    };
+};
 
 }(window.jQuery));
