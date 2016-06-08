@@ -2,6 +2,9 @@
 
 @{
     ViewBag.Title = "Index";
+    var start = DateTime.Today;
+    var clockQuery = from offset in Enumerable.Range(0, 48) select TimeSpan.FromMinutes(30 * offset);
+    List<string> timeList = clockQuery.Select(time => (start + time).ToString("hh:mm tt")).ToList();
 }
 
 <h2>Index</h2>
@@ -9,6 +12,15 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+<select id="thisList">
+    @foreach (var item in timeList)
+    {
+        <option value="@item">@item</option>
+    }
+</select>
+<div id="thisTime"></div>
+<br />
 <table class="table">
     <tr>
         <th>
@@ -43,3 +55,13 @@
 }
 
 </table>
+@section Scripts
+{
+    @Scripts.Render("~/Scripts/site.js")
+
+    <script type="text/javascript">
+        $(document).ready(
+            Planning.Site.Init()
+        );
+    </script>
+}
